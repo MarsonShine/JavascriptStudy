@@ -11,7 +11,9 @@
 
 <body>
     <div id="app">
-        <ve-line :data="chartData" :extend="extend" :tooltipVisible="false" :settings="settings"></ve-line>
+        <ve-line :data="chartData" :after-config="afterConfig" :settings="settings" :tooltip-Visible="false"
+            :tooltip-Visible="false">
+        </ve-line>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
@@ -19,17 +21,17 @@
     <script>
         var v = new Vue({
             el: '#app',
-            tooltipVisible: false,
             data: function () {
                 return {
-                    tooltipVisible: false,
-                    chartData: {
-                        settings: {
-                            tooltip: {
-                                showContent: false
+                    settings: {
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
                             }
-                        },
-                        extend: {},
+                        }
+                    },
+                    chartData: {
                         columns: ['日期', '访问用户', '下单用户'],
                         rows: [{
                                 '日期': '2018-01-01',
@@ -70,9 +72,20 @@
                         ]
                     }
                 }
+            },
+            methods: {
+                afterConfig(options) {
+                    console.log("afterConfig", options);
+                    options.series[1].label = {
+                        normal: {
+                            show: false,
+                            position: 'top'
+                        }
+                    }
+                    return options;
+                }
             }
         });
-        console.log('v', v);
     </script>
 </body>
 
