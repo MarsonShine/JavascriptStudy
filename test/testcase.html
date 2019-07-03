@@ -12,7 +12,42 @@
     <script src="../src/oop/oop.js"></script>
     <script src="../src/oop/imageconvertbase64.js"></script>
     <script>
+        const LOCAL_STORAGE_KEY = "getSessionStorage_PageCount";
+        var sessionItem = { pageUrl: window.location.href, count: 0 };
+        //listen close tab
+        window.onload = function () {
+            increaseSession();
+        }
+        window.onbeforeunload = function () {
+            decreaseSession();
+        }
 
+        function decreaseSession() {
+            if (!!localStorage.length) {
+                var pageCount = getPageCountSessionStorage();
+                if (!pageCount) return;
+            }
+        }
+        function increaseSession() {
+            if (!!localStorage.length) {
+                var pageCount = getPageCountSessionStorage();
+                if (!pageCount) setPageCountSessionStorage({ pageUrl: window.location.href, count: 1 });
+                pageCount.count++;
+                setPageCountSessionStorage(pageCount);
+            }
+        }
+        function setPageCountSessionStorage(obj) {
+            if (!!localStorage.length) {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(obj));
+            }
+        }
+        function getPageCountSessionStorage() {
+            if (!!localStorage.length) {
+                var pageCount = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+                if (!pageCount) return null;
+                return pageCount;
+            }
+        }
     </script>
 </body>
 
