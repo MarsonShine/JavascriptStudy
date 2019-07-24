@@ -1,0 +1,300 @@
+
+
+/* jswbox */
+#jswbox {
+    width: 100%;
+    height: 715px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#jswbox ul {
+    position: relative;
+    height: 715px;
+}
+
+#jswbox li {
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: 0;
+    cursor: pointer;
+    overflow: hidden;
+    top: 152px;
+    left: 10px;
+}
+
+#jswbox li img {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    float: left;
+}
+
+#jswbox .prev,
+#jswbox .next {
+    display: none;
+}
+
+/*------------------------------------------ common ---------------------------------------------*/
+body {
+    background: #000;
+}
+@media (min-width: 768px) {
+    .zoom {
+        zoom: 0.6;
+    }
+}
+
+/* 中等屏幕（桌面显示器，大于等于 992px） */
+@media (min-width: 992px) {
+    .zoom {
+        zoom: 0.7;
+    }
+}
+
+/* 大屏幕（大桌面显示器，大于等于 1200px） */
+@media (min-width: 1200px) {
+    .zoom {
+        zoom: 0.85;
+    }
+}
+
+.centent {
+    width: 1808px;
+    margin: 76px auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/*-----  header start -----*/
+.mod-header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 86px;
+    z-index: 99;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mod-links {
+    width: 120px;
+    height: 41px;
+    background: #fff;
+    padding-left: 76px;
+    position: relative;
+}
+
+.mod-links .none {
+    position: absolute;
+    top: 8px;
+    right: -32px;
+    width: 0px;
+    height: 0px;
+    border-top: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 20px solid #fff;
+}
+
+.mod-header .right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    display: flex;
+}
+
+.nav-list .item {
+    width: 148px;
+    height: 40px;
+    background-size: 100% 100%;
+    cursor: pointer;
+}
+
+.nav-list .item1 {
+    background: url(../images/nav/product-mouse.png)no-repeat;
+}
+
+.nav-list .item2 {
+    background: url(../images/nav/brand-mouse.png)no-repeat;
+}
+
+.nav-list .item3 {
+    background: url(../images/nav/video-mouse.png)no-repeat;
+}
+
+.nav-list .item4 {
+    background: url(../images/nav/blog-mouse.png)no-repeat;
+}
+
+.nav-list .item1:hover {
+    background: url(../images/nav/product-mouse-on.png)no-repeat;
+}
+
+.nav-list .item2:hover {
+    background: url(../images/nav/brand-mouse-on.png)no-repeat;
+}
+
+.nav-list .item3:hover {
+    background: url(../images/nav/video-mouse-on.png)no-repeat;
+}
+
+.nav-list .item4:hover {
+    background: url(../images/nav/blog-mouse-on.png)no-repeat;
+}
+
+.nav-list .item1:active {
+    background: url(../images/nav/product-click.png)no-repeat;
+}
+
+.nav-list .item2:active {
+    background: url(../images/nav/brand-click.png)no-repeat;
+}
+
+.nav-list .item3:active {
+    background: url(../images/nav/video-click.png)no-repeat;
+}
+
+.nav-list .item4:active {
+    background: url(../images/nav/blog-click.png)no-repeat;
+}
+
+.mod-header .logo-box {
+    width: 229px;
+    height: 61px;
+}
+
+
+/* index */
+.desc-wrap {
+    width: 700px;
+    min-height: 100px;
+}
+
+.img-wrap {
+    width: 314px;
+    margin-right: 22px;
+}
+
+.img-wrap img {
+    width: 314px;
+    height: 587px;
+}
+
+.vido-wrap {
+    width: 544px;
+}
+
+.vido-item:nth-child(2) {
+    margin-top: 22px;
+}
+
+.img-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.img-list .item {
+    width: 71px;
+    height: 71px;
+    margin-top: 22px;
+    border: 2px #fff solid;
+}
+
+.img-list .item img {
+    width: 71px;
+    height: 71px;
+}
+
+.banner-wrap {
+    width: 800px;
+    position: absolute;
+    bottom: 111px;
+    left: 50%;
+    margin-left: -400px;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+}
+
+.banner-wrap .inner {
+    margin-left: 20px;
+    display: flex;
+}
+
+.banner-wrap .inner:first {
+    margin-left: 0;
+}
+
+.banner-wrap .desc-box {
+    /* display: none; */
+    width: 241px;
+    height: 96px;
+    background: pink;
+    padding: 10px;
+    color: #fff;
+    word-wrap: break-word;
+    overflow: hidden;
+    background: url('../images/bg.png')no-repeat;
+}
+
+.banner-wrap .desc-box .title {
+    font-size: 22px;
+}
+
+.banner-wrap .desc-box .subtitle {
+    font-size: 16px;
+}
+
+
+
+.animat {
+    position: relative;
+    animation: mymove 1s infinite;
+    -webkit-animation: mymove 1s infinite;
+    /*Safari and Chrome*/
+    animation-direction: alternate;
+    /*轮流反向播放动画。*/
+    animation-timing-function: ease-in-out;
+    /*动画的速度曲线*/
+    animation-iteration-count: 1;
+    /* Safari 和 Chrome */
+    -webkit-animation: mymove 1s infinite;
+    -webkit-animation-direction: alternate;
+    /*轮流反向播放动画。*/
+    -webkit-animation-timing-function: ease-in-out;
+    /*动画的速度曲线*/
+
+}
+
+@keyframes mymove {
+    0% {
+        transform: scale(0.7);
+        /*开始为原始大小*/
+    }
+
+    100% {
+        transform: scale(1);
+        /*放大1.1倍*/
+    }
+
+}
+
+@-webkit-keyframes mymove
+
+/*Safari and Chrome*/
+    {
+    0% {
+        transform: scale(1);
+        /*开始为原始大小*/
+    }
+
+    100% {
+        transform: scale(1.5);
+        /*放大1.1倍*/
+    }
+}

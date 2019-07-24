@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Swiper在PC端的全屏页面效果展示</title>
+    <meta name="description"
+        content="Swiper2+CSS3，没有使用animate.js和Animate.css，用TransitionEnd替换有时会失灵的onSlideChangeEnd，Loop模式下也没问题，提高了可用性">
+    <link rel="stylesheet" href="static/css/idangerous.swiper.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/global.css" type="text/css">
+</head>
+
+<body>
+    <div class="mod-header">
+        <div class="mod-links">
+            <a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href="#"
+                class="seach">SEACH</a>
+            <span class="none"></span>
+        </div>
+        <div class="right">
+            <ul class="nav-list">
+                <li class="item item1"><a href="#"></a></li>
+                <li class="item item2"><a href="#"></a></li>
+                <li class="item item3"><a href="#"></a></li>
+                <li class="item item4"><a href="#"></a></li>
+            </ul>
+            <div class="logo-box">
+                <img src="http://temp.im/229x61" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide slide1">
+
+            </div>
+            <div class="swiper-slide slide2">
+                <div class="centent zoom">
+                    <div class="desc-wrap">
+                    </div>
+                    <div class="img-wrap ani3-1" id="mytag">
+                        <div class="view-images">
+                            <img src="http://temp.im/314x587" alt="">
+                        </div>
+                        <div class="img-list ani ani3-2">
+                            <span class="item"><img src="static/images/2.jpg" alt=""></span>
+                            <span class="item"><img src="static/images/1.jpg" alt=""></span>
+                            <span class="item"><img src="http://temp.im/71x71" alt=""></span>
+                            <span class="item"><img src="http://temp.im/71x71" alt=""></span>
+                        </div>
+                    </div>
+                    <div class="vido-wrap">
+                        <div class="vido-item ani3-1"><img src="http://temp.im/344x389" alt=""></div>
+                        <div class="vido-item ani3-2"><img src="http://temp.im/344x389" alt=""></div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide3">
+                <div style="position: absolute;left: 28%;top:25%;z-index:10;">
+                    <div class="ani ani3-1"><img src="img/3-title.png"></div>
+                    <div class="fs16 white mt20 ml10 ani ani3-2">
+                        <p>两年前，给老公买了份保险，产品条款当时客服怎么解释来着？</p>
+                        <p class="line mt20 mb20"></p>
+                        <p>电话语音记录<span class="dividing-line"></span>在线交互记录<span
+                                class="dividing-line"></span>随时随地查询、导出、转存</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide4">
+                <div class="banner-wrap ani3-2">
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pagination"></div>
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/idangerous.swiper2.7.6.min.js"></script>
+    <script src="static/js/pcpage.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.img-list').on('hover', 'span', function () {
+                var src = $(this).find('img').prop('src');
+                $('.view-images img').prop('src', src);
+                $('.view-images').removeClass('animate').stop().addClass('animate');
+            })
+            var $objs = $('.banner-wrap');
+            $objs.on('mouseover', '.img-box', function (e) {
+                $(this).next().stop().show(300);
+                e.stopPropagation();
+            })
+            $objs.on('mouseout', '.img-box', function (e) {
+                $(this).next().stop().hide(300);
+                e.stopPropagation();
+            })
+        })
+    </script>
+</body>
+
+</html>

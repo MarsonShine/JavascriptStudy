@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/css/global.css" type="text/css">
+    <link rel="stylesheet" href="static/css/style.css" type="text/css">
+    <link rel="stylesheet" href="static/css/swiper.min.css">
+    <script type="text/javascript" src="static/js/ZoomPic.js"></script>
+</head>
+
+<body>
+    <div class="mod-header">
+        <div class="mod-links">
+            <a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a href="#"
+                class="seach">SEACH</a>
+            <span class="none"></span>
+        </div>
+        <div class="right">
+            <ul class="nav-list">
+                <li class="item item1"><a href="#"></a></li>
+                <li class="item item2"><a href="#"></a></li>
+                <li class="item item3"><a href="#"></a></li>
+                <li class="item item4"><a href="#"></a></li>
+            </ul>
+            <div class="logo-box">
+                <img src="http://temp.im/229x61" alt="">
+            </div>
+        </div>
+    </div>
+
+    <!-- index -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide s1">
+                <img src="static/images/index.jpg" alt="">
+            </div>
+            <!-- 第二屏 -->
+            <div class="swiper-slide s2">
+                <div class="centent zoom">
+                    <div class="desc-wrap">
+
+                    </div>
+                    <div class="img-wrap">
+                        <div class="view-images">
+                            <img src="http://temp.im/314x587" alt="">
+                        </div>
+                        <div class="img-list">
+                            <span class="item"><img src="static/images/2.jpg" alt=""></span>
+                            <span class="item"><img src="static/images/1.jpg" alt=""></span>
+                            <span class="item"><img src="http://temp.im/71x71" alt=""></span>
+                            <span class="item"><img src="http://temp.im/71x71" alt=""></span>
+                        </div>
+                    </div>
+                    <div class="vido-wrap">
+                        <div class="vido-item"><img src="http://temp.im/344x389" alt=""></div>
+                        <div class="vido-item"><img src="http://temp.im/344x389" alt=""></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 第三屏 -->
+            <div class="swiper-slide s3 img_div">
+                <div class="" id="featured-area">
+                    <pre class="prev">prev</pre>
+                    <pre class="next">next</pre>
+                    <ul>
+                        <li><img src="http://temp.im/998x715" /></li>
+                        <li><img src="static/images/2.jpg" /></li>
+                        <li><img src="static/images/3.jpg" /></li>
+                        <li><img src="static/images/4.jpg" /></li>
+                        <li><img src="static/images/5.jpg" /></li>
+                        <li><img src="static/images/6.jpg" /></li>
+                        <li><img src="static/images/7.jpg" /></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- <div class="swiper-slide s3 img_div">
+                <div id="featured-area">
+                    <pre class="prev">prev</pre>
+                    <pre class="next">next</pre>
+                    <ul>
+                        <li><img src="http://temp.im/998x715" /></li>
+                        <li><img src="static/images/2.jpg" /></li>
+                        <li><img src="static/images/3.jpg" /></li>
+                        <li><img src="static/images/4.jpg" /></li>
+                        <li><img src="static/images/5.jpg" /></li>
+                        <li><img src="static/images/6.jpg" /></li>
+                        <li><img src="static/images/7.jpg" /></li>
+                    </ul>
+                </div>
+            </div> -->
+            <!-- 第四屏 -->
+            <div class="swiper-slide s4">
+                <img src="static/images/index.jpg" alt="">
+                <div class="banner-wrap">
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                    <div class="inner">
+                        <div class="img-box">
+                            <img src="http://temp.im/219x115" alt="">
+                        </div>
+                        <div class="desc-box">
+                            <div class="title">gvrgtgt</div>
+                            <div class="subtitle">rjfirjfirfjrjroorjfirfjirjvirhvirhvirvhri</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 分页器 -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <script type="text/javascript" src="static/js/jquery-1.12.4.min.js"></script>
+    <script src="static/js/swiper.min.js"></script>
+    <script src="static/js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="static/js/jquery.roundabout.js"></script>
+    <script type="text/javascript">
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: 5000,//可选选项，自动滑动
+            direction: 'vertical',
+            pagination: '.swiper-pagination',
+            mousewheelControl: true,
+            loop: true,
+            height: window.innerHeight
+        })
+        // 第二层
+        $('.img-list').on('hover', '.item', function () {
+            var img = $(this).find('img').prop('src');
+            $('.view-images img').prop('src', img);
+            // $('.view-images').removeClass('animat')
+            // .stop()
+            // .addClass('animat');
+        })
+        //第三层
+        $(function () {
+            // jQuery.extend(jQuery.roundaboutShapes, {
+            //     gimmeSeven: function (r, a, t) {
+            //         return {
+            //             x: (Math.sin(r) > 0) ? Math.sin(r / 2) : Math.sin(r / 2 + Math.PI),
+            //             y: (Math.sin(r + 3 * Math.PI / 2 + a) / 8) * t,
+            //             z: (Math.cos(r + a) + 1) / 2,
+            //             scale: (Math.sin(r + Math.PI / 2 + a) / 2) + 0.5
+            //         }
+            //     }
+            // })
+            $('#featured-area ul').roundabout({
+                startingChild: 3,
+                btnPrev: ".prev",
+                btnNext: ".next",
+                easing: 'easeOutInCirc',
+                enableDrag: true,
+                // shape: 'gimmeFive'
+            });
+        })
+        // $(function () {
+        //     new ZoomPic("jswbox");
+        // })
+
+    </script>
+</body>
+
+</html>
