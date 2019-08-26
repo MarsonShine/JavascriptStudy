@@ -1,5 +1,8 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { format } from 'url';
+import { AuthService } from 'src/app/guard/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   validateForm: FormGroup;
-
+  constructor(private router: Router, private authService: AuthService, private fb: FormBuilder) { }
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
@@ -18,10 +21,23 @@ export class LoginComponent implements OnInit {
       alert("验证不通过");
       return;
     }
+    this.login();
     console.log("点击 form 事件：", (this.fb), this.validateForm);
+    //手动导航跳转
+    this.router.navigate(['/index']);
   }
 
-  constructor(private fb: FormBuilder) { }
+  login(): void {
+    console.log('正在尝试登陆...');
+    this.authService.login().subscribe(() => {
+      console.log(this.authService.isLoggin ? "登陆状态 成功" : "登陆状态 失败");
+      if (this.authService.isLoggin) {
+        let redirectUrl = this.authService.redirectUrl ? this.router.parseUrl(this.authService.redirectUrl) : '/index';
+        this.router.navigateByUrl(redirectUrl);
+      }
+    })
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log("ngOnChanges:在onInit之前绑定一个或多个输入属性的值发生变化时调用" + changes);
   }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './page/login/login.component';
 import { AppComponent } from './app.component';
+import { LoginCanActivateGuard } from './guard/auth.guard';
 
 
 const routes: Routes = [
@@ -10,6 +11,7 @@ const routes: Routes = [
   {
     path: "index",
     loadChildren: () => import('./page/index/index.module').then(mod => mod.IndexModule),
+    canActivate: [LoginCanActivateGuard],
     data: { preload: true } //预加载策略
   }
 ];
