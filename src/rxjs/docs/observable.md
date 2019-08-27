@@ -143,3 +143,125 @@ foo.subscriber(y => {
 
 > 订阅（Subscribing）一个可观察的对象（Observable）跟调用一个函数是类似的。
 
+Observable 和 函数之间的区别是什么呢？Observable 能随着时间返回多个值，还有一些是函数不能做的。比如你不能这么做：
+
+```javascript
+function foo()
+{
+    console.log('hello');
+    return 42;
+    return 100;	//死代码。永远不会发生这行
+}
+```
+
+函数只能返回一个值。Observable 就能做到这个：
+
+```javascript
+import { Observable } from 'rxjs';
+
+const foo = new Observable(subscribe => {
+    console.log('Hello');
+    subscriber.next(42);
+    subscriber.next(100);	//返回值
+    subscriber.next(200);	//同样还是返回值
+})
+
+console.log('before');
+foo.subscribe(x => {
+    console.log(x);
+});
+console.log('after');
+```
+
+同步输出：
+
+```c#
+"before"
+"before"
+42
+100
+200
+"after"
+```
+
+你也能异步返回这些值：
+
+```c#
+import { Observable } from 'rxjs';
+
+const foo = new Observable(subscriber => {
+    console.log('hello');
+    subscriber.next(42);
+  	subscriber.next(100);
+  	subscriber.next(200);
+    setTimeout(() => {
+        subscriber.next(300);	//异步
+    },1000);
+});
+
+console.log('before');
+foo.subscribe(x => {
+  console.log(x);
+});
+console.log('after');
+```
+
+输出：
+
+```
+"before"
+"Hello"
+42
+100
+200
+"after"
+300
+```
+
+**结论：**
+
+- `func.call()` 意思是说 “同步给我一个值”
+- `observable.subscribe()` 意思是说 “给我任何数值，不管同步还是异步”
+
+# 深入解析 Observable
+
+Observables 是通过 `new Observable` 或一个创建操作符建立的，由观察者订阅，执行去推送 `next / error / complete` 通知到观察者（Observer），并且他们的执行也许会被处理。这里有 4 个方面都编码在可观察的（Observable）实例对象中，但是有一些方面与其他类型相关，比如 Observer 和 Subscription。
+
+核心的 Observable 概念如下：
+
+- 创建可观察的（Observables）对象
+- 订阅 Observables
+- 执行 Observables
+- 释放 Observables
+
+## 创建 Observables
+
+`Observable` 有个带一个参数的构造函数：`subscribe` 函数。
+
+下面的例子是创建一个 Observable，来向订阅者每秒发送一个字符串 ‘hi’。
+
+```javascript
+import { Observable } from 'rxjs';
+
+const observable = new Observable(subscribe => {
+    const id = setInterval(() => {
+        subscribe.next('hi')
+    },1000);
+});
+```
+
+> Observables 能通过实例化创建。但是多数情况下，observables 都是通过使用创建函数创建的，比如 `of,from,interval` 等。
+
+在上面的例子，`subscribe` 函数部分来订阅 Observable 是最重要的。让我们来看看订阅者订阅的意思。
+
+## 订阅 Observables
+
+Observable 的实例对象 `observable` 在例子中能够被订阅，像这样：
+
+```javascript
+observable.subscribe(x => console.log(x));
+```
+
+`observable.subscribe` 和 在实例化 `new Observable(function subscribe(subscriber){...})` 中的 `subscribe` 有相同的名字这不是巧合。在库中，它们是不同的，出于特定目的你可以考虑他们的概念是一致的。
+
+> //TODO 
