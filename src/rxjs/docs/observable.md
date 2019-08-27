@@ -264,4 +264,136 @@ observable.subscribe(x => console.log(x));
 
 `observable.subscribe` 和 在实例化 `new Observable(function subscribe(subscriber){...})` 中的 `subscribe` 有相同的名字这不是巧合。在库中，它们是不同的，出于特定目的你可以考虑他们的概念是一致的。
 
-> //TODO 
+这个展示了 `subscribe` 怎样调用是不会在多个可观察对象的相同可观察对象之间共享。当观察者 Observer 调用 `observable.subscribe`，`new Observable(function subscribe(subscriber) {...})` 中的函数 `subscribe` 运行在给定的订阅器上运行。
+
+> 订阅一个可观察者对象（Observable）就像调用一个函数，在数据将被传递到的地方提供一个回调函数。
+
+这对于事件处理 API 来说是彻底不同的，像 `addEventListener` / `removeEventListener`。通过 `observable.subscribe`,给定的观察者是不会作为侦听者注册到可观察对象（Observable）中去。Observable 甚至不会维护已经附加进来的列表。
+
+调用 `subscribe` 是一种简单的方式来开始一个 “可观察的执行” 以及传递值或是传递执行的可观察的事件。
+
+## 执行 Observables
+
+在代码 `new Observable(function subscribe(subscriber){...})` 代码里表示一个 "可观察的执行"，是一个延迟执行，它只发生在每个观察者（Observer）订阅的时候。这个执行多次会生成多个值，无论同步还是异步。
+
+这里有三个类型的值在可观察者执行时传递：
+
+- "Next" 通知：发送一个值，比如数字类型，字符串类型以及对象等
+- "Error" 通知：发送一个 Javascript 错误或异常
+- "Complete" 通知：不会发送任何值
+
+"Next" 通知是最重要的并且是最常用的类型：它们表示一个数据被传递到订阅者的行为。"Error" 和 "Complete" 通知可能只发生一次在可观察的对象执行期间，它们只能发生一个。
+
+在调用 Observable 语法或契约中，这些约束表现得最好，写成一个正则表达式：
+
+```c#
+next*(error|complete)?
+```
+
+> 在 Observable 执行中，下一个通知可以从 0 发送到无穷。如一个 Error 或是 Complete 被发送了，那么在之后就不会有任何东西被发送：
+>
+> ```javascript
+> import { Observable } from 'rxjs';
+> 
+> const observable = new Observable(function subscribe(subscriber){
+>     subscriber.next(1);
+>     subscriber.next(2);
+>     subscriber.next(3);
+>     subscriber.complete();
+> });
+> ```
+
+Observables 严格遵守 Observable 契约，所以下面这段代码将不会传递到 Next 通知 4：
+
+```javascript
+import { Observable } from 'rxjs';
+
+const observable = new Observable(function subscribe(subscriber){
+    subscriber.next(1);
+    subscriber.next(2);
+    subscriber.next(3);
+    subscriber.complete();
+    subscriber.next(4);//这里永远都不会执行。因为已经complete
+})
+```
+
+这种方法是好的，在 `subscriber` 中通过 `try/catch` 代码块包装任何代码，它将传递一个 Error 通知，如果捕捉到异常的话。
+
+```javascript
+import { Observable } from 'rxjs';
+
+const observable = new Observable(function subscribe(subscriber){
+    try{
+        subscriber.next(1);
+        subscriber.next(2);
+        subscriber.next(3);
+        subscriber.complete();
+    } catch (err) {
+        subscriber.error(err);	//传递一个错误对象，如果捕捉到异常的话。
+    }
+});
+```
+
+## 释放 Observable 执行
+
+由于 Observaber 执行可能会无穷，并且共同的就是观察者（Observer）想要在有限的时间放弃这个执行，所以我们需要一个 api 来取消执行。由于每个执行在一个 Observer 都是独有的，一旦 Observer 做完了接收数据，为了避免浪费计算以及内存资源，那么它就必须有一种方式来停止执行。
+
+当 `observable.subscribe` 被调用时，观察者（Observer）被附加到最新创建的 Observable 执行。Subscription 它也返回一个对象：
+
+```javascript
+const subscription = observable.subscribe(x => console.log(x));
+```
+
+Subscription 表示正在执行，有一个最小的 api，这个 api 允许你取消执行。关于 [Subscription](https://rxjs.dev/guide/subscription) 这里可以阅读更多。通过 `subscription.unsubcribe()` 你可以取消正在执行中的执行。
+
+```javascript
+import { from } from 'rxjs';
+
+const observable = from([10,20,30]);
+const subscription = observable.subscribe(x => console.log(x));
+//之后
+subscribe.unsubscribe();
+```
+
+> 当你订阅的时候，你会得到一个 Subscription，它表示正在执行的执行。仅仅调用 `unsubscribe` 取消执行。
+
+每个 Observable 必须定义怎么去释放执行的资源，当我们使用 `create` 创建 Observable 时。你可以通过返回一个自定义的 `ubsubcribe` 方法做到这个。
+
+举个例子，这里展示了我们通过 `setInterval 清除一个间隔执行`：
+
+```javascript
+const observable = new Observable(function subscribe(subscriber){
+    //根据间隔资源
+    const intervalId = setInterval(() => {
+        subscribe,next('hi')
+    },1000);
+    
+    //提供一个方法来取消以及释放间隔资源。
+    return function unsubscribe()
+    {
+        clearInterval(intervaleId);
+    }
+})
+```
+
+由此可见 `observable.subscribe` 相似 `new Observable(function subscribe(subscriber){...})`，我们从 `subscribe` 返回 `unsubscribe`，在概念上等同于 `subscribe.unsubscribe`。实际上，如果我们移除围绕 ReactiveX 概念的类型，剩下的 JavaScript 代码就不在陌生了。
+
+```javascript
+function subscribe(subscriber)
+{
+    const intervalId = setInterval(() => {
+        subscribe.next('hi');
+    },1000);
+    
+    return function unsubscribe(){
+        clearInterval(intervalId);
+    }
+}
+
+const unsubscribe = subscribe({next: (x) => console.log(x)});
+
+//最后
+unsubscriber();	//释放资源
+```
+
+我们使用的 RxJS 类型，如 Observable，Observer，Subscription 的理由是更安全的获得（例如 Obscervable 契约）以及 Operators（操作符）的组合性。
