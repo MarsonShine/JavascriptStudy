@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RxJS overview</title>
+</head>
+
+<body>
+    <!-- <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.min.js"></script> -->
+    <script src="lib/rxjs.umd.min.js"></script>
+    <script>
+        const { range, fromEvent } = rxjs;
+        const { map, filter, scan, throttleTime } = rxjs.operators;
+        // document.addEventListener('click', () => console.log('Clicked!'));
+
+        // fromEvent(document, 'click')
+        //     .pipe(scan(count => count + 1, 0))
+        //     .subscribe(count => console.log(`Clicked ${count} times`));
+
+        //控制每秒只点击一次
+        fromEvent(document, 'click')
+            .pipe(
+                throttleTime(1000),
+                scan(count => count + 1, 0)
+            )
+            .subscribe(count => console.log(`Clicked ${count} times`));
+
+        //可观察对象 Observable 之间传递值
+        //每次点击添加当前鼠标的 x 坐标
+        fromEvent(document, 'click')
+            .pipe(
+                throttleTime(1000),
+                map(event => event.clientX),
+                scan((count, clientX) => count + clientX, 0)
+            )
+            .subscribe((count) => console.log(`Clicked ${count} times`));
+    </script>
+</body>
+
+</html>
