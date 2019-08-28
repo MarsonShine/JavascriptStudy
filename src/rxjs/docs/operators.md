@@ -67,7 +67,7 @@ const observable = interval(1000 /* number of milliseconds */);
 
 [这里](https://rxjs.dev/guide/operators#creation-operators)查看所有的静态创建操作符。
 
-# 高优先级的 Observables
+# 高阶 Observables
 
 Observables 大体上是有顺序的发送值（数字或字符串），但是也有例外，处理 Observables 的 Observables 是有必要的，叫做高阶 Observables。例如，想象你有一个 Observable，它发送文件的地址的字符串，这个字符串恰好是想要看到的。代码如下：
 
@@ -77,3 +77,33 @@ const fileObservable = urlObservable.pipe(
 );
 ```
 
+`http.get()` 返回每个 URL 的 Observable 对象（可能是字符串或字符串数组）。现在你有一个 Observables 对象了，一个高阶 Observable。
+
+但是这个高阶 Observable 是怎么工作的呢？通常通过平坦化：通过某种方式将高阶 Observable 转换成一个普通的 Observable。例如：
+
+```javascript
+const fileObservable = urlObservable.pipe(
+	map(url => http.get(url)),
+    concatAll(),
+);
+```
+
+`concatAll()` 操作订阅了每个内部的 Observable，它会带出来一个 Observable 对象，并复制所有的发送的值知道Observable 完成，然后继续执行下一个。所有的值都是以这种方式串起来的。其他的扁平用处的操作（也叫链接操作符（join operators））
+
+- `mergeAll()` —— 订阅每个内部到达的 Observable 对象，然后发送它到达的每一个值
+- `switchAll()` —— 当内部的 Observable 第一个到达时订阅（Observable），然后每个到达时发送值，但是当下个内部的 Observable 到达时，上一个订阅取消，并订阅这个新的 Observable。
+- `exhaust()` —— 当 Observable 到达时订阅第一个，每个在它到达时发送值，在第一个完成之前，丢弃所有新到大的 Observable 对象，完成之后等待下一个 Observable。
+
+就像组合了数组库中许多的 `map()`，`flat()`（或者是 `flatten()`），他们映射就等价于 RxJS 中的 扁平操作符 concatMap()，`mergeMap()`，`switchMap()` 以及 `exhaustMap()`。
+
+## 弹珠图标（Marble diagrams）
+
+为了解释操作符是如何工作的，本文还不足以描述。太多的操作符相关联了，他们实例化可能以不同的方式延迟，举例，节流，降低值发送（频率）。为了更好的描述，图标经常是最好的工具。弹珠图表是可视化的表示 operator 是如何工作的，也包括了 Observable 输入，operator 以及它们的参数，还有 Observable 的输出。
+
+> 在弹珠图中，时间轴向右移动，并且图描述了值 “弹珠” 在 Observable 运行的时候是如何发送的。
+
+根据下面你能看到弹珠图的解析。
+
+![](F:\MS\Project\JavascriptStudy\src\rxjs\docs\asserts\marble-diagram-anatomy.svg)
+
+贯穿文档节点，我们普遍使用 marble diagrams 来解释 operator 是如何工作的。它们在其他的方面也是很有用的，比如在白板甚至是在我们的单元测试中（作为 ASCII 图表）。
