@@ -37,3 +37,43 @@ first()(of(1, 2, 3)).subscribe((v) => console.log(`value: ${v}`));
 ```
 
 注意 `map` 逻辑部分必须要动态构造，因为它必须被赋予映射函数来做。通过对比，first 是一个常数，但是还是得动态构造。作为一般实践，所有的操作符都要被构造，无论他们是否需要参数。
+
+# 管道（Piping）
+
+管道操作符是函数，所以他们能像原生函数使用：`op()(obs)` — 但是实际上，他们都互相交织在一起，很快就会演变得不利于阅读的：`op4()(op3()(op2()(op1()(obs))))`。所以基于这个原因，Observables 有一个方法 `.pipe()` 可以调用，它能完成相同的事，并且更易读的：
+
+```javascript
+obs.pipe(
+ op1(),
+ op2(),
+ op3(),
+ op4(),
+)
+```
+
+作为一个风格，`op()(obs)` 永不这样使用，甚至是只有一个操作符时，`obs.pipe(op())` 也是首选的。
+
+# 创建操作符
+
+什么是创建操作符？为了区别管道操作符，创建操作符是一个函数，能被用来创建通过一些共同的预定义的行为或者关联其他的 Observables 的 Observables 。
+
+一个典型的创建操作符例子是 `interval` 函数。它要求一个数字类型作为输入参数，并返回 Observable 作为输出：
+
+```javascript
+import { interval } from 'rxjs';
+
+const observable = interval(1000 /* number of milliseconds */);
+```
+
+[这里](https://rxjs.dev/guide/operators#creation-operators)查看所有的静态创建操作符。
+
+# 高优先级的 Observables
+
+Observables 大体上是有顺序的发送值（数字或字符串），但是也有例外，处理 Observables 的 Observables 是有必要的，叫做高阶 Observables。例如，想象你有一个 Observable，它发送文件的地址的字符串，这个字符串恰好是想要看到的。代码如下：
+
+```javascript
+const fileObservable = urlObservable.pipe(
+	map(url => http.get(url)),
+);
+```
+
