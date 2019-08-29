@@ -107,3 +107,230 @@ const fileObservable = urlObservable.pipe(
 ![](F:\MS\Project\JavascriptStudy\src\rxjs\docs\asserts\marble-diagram-anatomy.svg)
 
 贯穿文档节点，我们普遍使用 marble diagrams 来解释 operator 是如何工作的。它们在其他的方面也是很有用的，比如在白板甚至是在我们的单元测试中（作为 ASCII 图表）。
+
+> 按照图标的顺序，我解释下上面的意思：
+>
+> 1. 这个从左到右的时间轴是表示输入的 Observable 的执行过程
+> 2. 4，6，a，8 这些值是 Observable 要发送的值
+> 3. 紧接着的 “|” 是表示 “完成”  通知，表明这个 Observable 已经成功完成。
+> 4. 中间的盒子表明操作符，它传递上面输入的 Observable 生成一个 Observable 作为输出（下面一条线）方框内的文本显示了转换的性质
+> 5. 调用操作符输出 Observable
+> 6. “X” 表示这个输出的 Observable 发送错误，表明异常终止。至此之后不会有任何值发送。
+
+# 操作符的分类
+
+有很多操作是使用目的是不同的，他们分这几类：创建，转换，过滤，联合，多播，错误处理，公共等等。下面的列表你会发现所有被分类的操作符。
+
+为了完成的概述，你可以看这个 [API 文档](https://rxjs.dev/api)
+
+## 创建操作符
+
+- [`ajax`](https://rxjs.dev/api/ajax/ajax)
+- [`bindCallback`](https://rxjs.dev/api/index/function/bindCallback)
+- [`bindNodeCallback`](https://rxjs.dev/api/index/function/bindNodeCallback)
+- [`defer`](https://rxjs.dev/api/index/function/defer)
+- [`empty`](https://rxjs.dev/api/index/function/empty)
+- [`from`](https://rxjs.dev/api/index/function/from)
+- [`fromEvent`](https://rxjs.dev/api/index/function/fromEvent)
+- [`fromEventPattern`](https://rxjs.dev/api/index/function/fromEventPattern)
+- [`generate`](https://rxjs.dev/api/index/function/generate)
+- [`interval`](https://rxjs.dev/api/index/function/interval)
+- [`of`](https://rxjs.dev/api/index/function/of)
+- [`range`](https://rxjs.dev/api/index/function/range)
+- [`throwError`](https://rxjs.dev/api/index/function/throwError)
+- [`timer`](https://rxjs.dev/api/index/function/timer)
+- [`iif`](https://rxjs.dev/api/index/function/iif)
+
+## 链接创建操作
+
+- [`combineLatest`](https://rxjs.dev/api/index/function/combineLatest)
+- [`concat`](https://rxjs.dev/api/index/function/concat)
+- [`forkJoin`](https://rxjs.dev/api/index/function/forkJoin)
+- [`merge`](https://rxjs.dev/api/index/function/merge)
+- [`race`](https://rxjs.dev/api/index/function/race)
+- [`zip`](https://rxjs.dev/api/index/function/zip)
+
+## 转化操作符
+
+- [`buffer`](https://rxjs.dev/api/operators/buffer)
+- [`bufferCount`](https://rxjs.dev/api/operators/bufferCount)
+- [`bufferTime`](https://rxjs.dev/api/operators/bufferTime)
+- [`bufferToggle`](https://rxjs.dev/api/operators/bufferToggle)
+- [`bufferWhen`](https://rxjs.dev/api/operators/bufferWhen)
+- [`concatMap`](https://rxjs.dev/api/operators/concatMap)
+- [`concatMapTo`](https://rxjs.dev/api/operators/concatMapTo)
+- [`exhaust`](https://rxjs.dev/api/operators/exhaust)
+- [`exhaustMap`](https://rxjs.dev/api/operators/exhaustMap)
+- [`expand`](https://rxjs.dev/api/operators/expand)
+- [`groupBy`](https://rxjs.dev/api/operators/groupBy)
+- [`map`](https://rxjs.dev/api/operators/map)
+- [`mapTo`](https://rxjs.dev/api/operators/mapTo)
+- [`mergeMap`](https://rxjs.dev/api/operators/mergeMap)
+- [`mergeMapTo`](https://rxjs.dev/api/operators/mergeMapTo)
+- [`mergeScan`](https://rxjs.dev/api/operators/mergeScan)
+- [`pairwise`](https://rxjs.dev/api/operators/pairwise)
+- [`partition`](https://rxjs.dev/api/operators/partition)
+- [`pluck`](https://rxjs.dev/api/operators/pluck)
+- [`scan`](https://rxjs.dev/api/operators/scan)
+- [`switchMap`](https://rxjs.dev/api/operators/switchMap)
+- [`switchMapTo`](https://rxjs.dev/api/operators/switchMapTo)
+- [`window`](https://rxjs.dev/api/operators/window)
+- [`windowCount`](https://rxjs.dev/api/operators/windowCount)
+- [`windowTime`](https://rxjs.dev/api/operators/windowTime)
+- [`windowToggle`](https://rxjs.dev/api/operators/windowToggle)
+- [`windowWhen`](https://rxjs.dev/api/operators/windowWhen)
+
+## 过滤操作符
+
+- [`audit`](https://rxjs.dev/api/operators/audit)
+- [`auditTime`](https://rxjs.dev/api/operators/auditTime)
+- [`debounce`](https://rxjs.dev/api/operators/debounce)
+- [`debounceTime`](https://rxjs.dev/api/operators/debounceTime)
+- [`distinct`](https://rxjs.dev/api/operators/distinct)
+- [`distinctKey`](https://rxjs.dev/class/es6/Observable.js~Observable.html#instance-method-distinctKey)
+- [`distinctUntilChanged`](https://rxjs.dev/api/operators/distinctUntilChanged)
+- [`distinctUntilKeyChanged`](https://rxjs.dev/api/operators/distinctUntilKeyChanged)
+- [`elementAt`](https://rxjs.dev/api/operators/elementAt)
+- [`filter`](https://rxjs.dev/api/operators/filter)
+- [`first`](https://rxjs.dev/api/operators/first)
+- [`ignoreElements`](https://rxjs.dev/api/operators/ignoreElements)
+- [`last`](https://rxjs.dev/api/operators/last)
+- [`sample`](https://rxjs.dev/api/operators/sample)
+- [`sampleTime`](https://rxjs.dev/api/operators/sampleTime)
+- [`single`](https://rxjs.dev/api/operators/single)
+- [`skip`](https://rxjs.dev/api/operators/skip)
+- [`skipLast`](https://rxjs.dev/api/operators/skipLast)
+- [`skipUntil`](https://rxjs.dev/api/operators/skipUntil)
+- [`skipWhile`](https://rxjs.dev/api/operators/skipWhile)
+- [`take`](https://rxjs.dev/api/operators/take)
+- [`takeLast`](https://rxjs.dev/api/operators/takeLast)
+- [`takeUntil`](https://rxjs.dev/api/operators/takeUntil)
+- [`takeWhile`](https://rxjs.dev/api/operators/takeWhile)
+- [`throttle`](https://rxjs.dev/api/operators/throttle)
+- [`throttleTime`](https://rxjs.dev/api/operators/throttleTime)
+
+## 连接操作符
+
+你也可以看 [连接创建操作符](https://rxjs.dev/guide/operators#join-creation-operators) 一节
+
+- [`combineAll`](https://rxjs.dev/api/operators/combineAll)
+- [`concatAll`](https://rxjs.dev/api/operators/concatAll)
+- [`exhaust`](https://rxjs.dev/api/operators/exhaust)
+- [`mergeAll`](https://rxjs.dev/api/operators/mergeAll)
+- [`startWith`](https://rxjs.dev/api/operators/startWith)
+- [`withLatestFrom`](https://rxjs.dev/api/operators/withLatestFrom)
+
+## 多播操作符
+
+- [`multicast`](https://rxjs.dev/api/operators/multicast)
+- [`publish`](https://rxjs.dev/api/operators/publish)
+- [`publishBehavior`](https://rxjs.dev/api/operators/publishBehavior)
+- [`publishLast`](https://rxjs.dev/api/operators/publishLast)
+- [`publishReplay`](https://rxjs.dev/api/operators/publishReplay)
+- [`share`](https://rxjs.dev/api/operators/share)
+
+## 异常处理操作符
+
+- [`catchError`](https://rxjs.dev/api/operators/catchError)
+- [`retry`](https://rxjs.dev/api/operators/retry)
+- [`retryWhen`](https://rxjs.dev/api/operators/retryWhen)
+
+## 公共操作符
+
+- [`tap`](https://rxjs.dev/api/operators/tap)
+- [`delay`](https://rxjs.dev/api/operators/delay)
+- [`delayWhen`](https://rxjs.dev/api/operators/delayWhen)
+- [`dematerialize`](https://rxjs.dev/api/operators/dematerialize)
+- [`materialize`](https://rxjs.dev/api/operators/materialize)
+- [`observeOn`](https://rxjs.dev/api/operators/observeOn)
+- [`subscribeOn`](https://rxjs.dev/api/operators/subscribeOn)
+- [`timeInterval`](https://rxjs.dev/api/operators/timeInterval)
+- [`timestamp`](https://rxjs.dev/api/operators/timestamp)
+- [`timeout`](https://rxjs.dev/api/operators/timeout)
+- [`timeoutWith`](https://rxjs.dev/api/operators/timeoutWith)
+- [`toArray`](https://rxjs.dev/api/operators/toArray)
+
+## 条件布尔操作符
+
+- [`defaultIfEmpty`](https://rxjs.dev/api/operators/defaultIfEmpty)
+- [`every`](https://rxjs.dev/api/operators/every)
+- [`find`](https://rxjs.dev/api/operators/find)
+- [`findIndex`](https://rxjs.dev/api/operators/findIndex)
+- [`isEmpty`](https://rxjs.dev/api/operators/isEmpty)
+
+## 数学和聚合操作符
+
+- [`count`](https://rxjs.dev/api/operators/count)
+- [`max`](https://rxjs.dev/api/operators/max)
+- [`min`](https://rxjs.dev/api/operators/min)
+- [`reduce`](https://rxjs.dev/api/operators/reduce)
+
+# 创建自定义的 Observables
+
+## 使用 `pipe()` 函数生成新的 Observable
+
+如果在你的代码里有常用的操作符序列，用 `pipe()` 函数来提取到新的操作符。甚至这个序列是不常见的，中断它到单个的操作符，这样能提高可读性。
+
+举个例子，你可以生成一个函数，这个函数舍弃奇数的值并给偶数值加倍：
+
+```javascript
+import { pipe } from 'rxjs';
+import { filter, map } from 'rxjs';
+
+function discardOddDoubleEven()
+{
+    return pipe(
+    	filter(v => !(v % 2)),
+        map(v => v +v),
+    );
+}
+```
+
+（`pipe()` 函数是这样类比的，但是又与 `.pipe()` 不是完全一样）
+
+## 从零创建新的操作符
+
+这个非常复杂，如果你一定要写一个不能通过现有的操作符组合而成的操作符（这是极少情况），你可以使用 Observable 构造函数从零写一个操作符，就像下面这样：
+
+```javascript
+import { Observable } from 'rxjs';
+
+function delay(delayInMillis)
+{
+    return (observable) => new Observable(observer => {
+        //这个函数将会没当 Observable 订阅的时候调用
+        const allTimerIDs = new Set();
+        const subscription = observable.subscribe({
+            next(value){
+                const timerID = setTimeout(() => {
+                    observer.next(value);
+                    allTimeIDs.delete(timerID);
+                }, delayInMillis);
+                allTimerIDs.add(timerID);
+            },
+            error(err) {
+                observer.error(err);
+            },
+            complete() {
+                observer.complete();
+            }
+        });
+        //返回值是一个卸载函数
+        //它当新的 Observable 被取消订阅时调用
+        return () => {
+            subscription.unsubscribe();
+            allTimerIDs.forEach(timerID => {
+                clearTimeout(timerID)
+            });
+        }
+    });
+}
+```
+
+你必须要注意以下几点
+
+1. 实现所有的 Observer 函数，`next()`，`error()`，`complete()` 当订阅这个输入的 Observer 的时候。
+2. 实现一个卸载函数，它负责清理，当 Observable 完成的时候（在上面的例子是通过取消订阅以及清除时间定时器函数）
+3. 返回一个从 Observable 构造传递过来的函数的卸载函数
+
+当然，这个只是一个例子；`delay()` 操作符已经存在了。
