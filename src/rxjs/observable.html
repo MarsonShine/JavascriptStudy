@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="lib/rxjs.umd.min.js"></script>
+    <script>
+        const { Observable } = rxjs;
+        let observable = new Observable(subscriber => {
+            subscriber.next(1);
+            subscriber.next(2);
+            subscriber.next(3);
+            setTimeout(() => {
+                subscriber.next(4);
+                subscriber.complete();
+            }, 1000);
+        });
+        console.log('just before subscribe');
+        observable.subscribe({
+            next(x) { console.log(`get value ${x}`); },
+            error(err) { console.log(`something wrong occurred: ` + err) },
+            complete() { console.log('done') }
+        });
+        console.log('just after subscribe');
+        // 输出
+        /*
+        console.log('just before subscribe');
+        get value 1
+        get value 2
+        get value 3
+        console.log('just after subscribe');
+        get value 4
+        done
+        */
+
+        function foo() {
+            console.log('Hello');
+            return 42;
+        }
+
+        const x = foo.call(); // same as foo()
+        console.log(x);
+        const y = foo.call(); // same as foo()
+        console.log(y);
+        /*
+        "Hello"
+        42
+        "Hello"
+        42
+        */
+
+        const foo_same = new Observable(subscriber => {
+            console.log('Hello');
+            subscriber.next(42);
+        })
+
+        foo_same.subscribe(x => {
+            console.log(x);
+        });
+        foo_same.subscribe(y => {
+            console.log(y)
+        });
+
+        observable = new Observable(function subscribe(subscriber) {
+            const id = setInterval(() => {
+                subscriber.next('hi')
+            }, 1000);
+        });
+        observable.subscribe(x => console.log(x));
+
+        //try catch
+        observable = new Observable(subscriber => {
+            try {
+                subscriber.next(1);
+                subscriber.next(2);
+                subscriber.next(3);
+                subscriber.complete();
+            } catch (err) {
+                subscriber.error(err);  //推送捕捉到的消息
+            }
+        });
+        observable.subscribe(x => console.log(x));
+
+        //from 创建 Observable
+        const { from } = rxjs;
+        observable = from([10, 20, 30]);
+        let subscription = observable.subscribe(x => console.log(x));
+        //释放
+        subscription.unsubscribe();
+
+        observable = new Observable(subscriber => {
+            const intervalId = setInterval(() => {
+                subscriber.next('hi');
+            }, 1000);
+            //这是提供给外部手动调用 unsubscribe 函数取消和释放计时器
+            return () => clearInterval(intervalId);
+        })
+
+        //调用
+        var clearFunc = observable.subscribe(x => console.log(x));
+        clearFunc.unsubscribe();    //取消了，每秒只会打印一次 x
+    </script>
+</body>
+
+</html>

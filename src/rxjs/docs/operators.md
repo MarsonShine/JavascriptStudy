@@ -171,7 +171,8 @@ const fileObservable = urlObservable.pipe(
 - [`pairwise`](https://rxjs.dev/api/operators/pairwise)
 - [`partition`](https://rxjs.dev/api/operators/partition)
 - [`pluck`](https://rxjs.dev/api/operators/pluck)
-- [`scan`](https://rxjs.dev/api/operators/scan)
+- [`scan`](https://rxjs.dev/api/operators/scan)应用在源 Observable 对象上的累加器函数，返回带有可选的种子值的每个中间结果，类似于 reduce，无论何时源推送值时，都会推送当前的累计值
+
 - [`switchMap`](https://rxjs.dev/api/operators/switchMap)
 - [`switchMapTo`](https://rxjs.dev/api/operators/switchMapTo)
 - [`window`](https://rxjs.dev/api/operators/window)
