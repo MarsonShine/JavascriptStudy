@@ -7,7 +7,12 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TopbarComponent } from "./page/topbar/topbar.component";
 import { LoginComponent } from './page/login/login.component';
+import { PartialImportModule } from './declaration/partial-import.module';
+import { ProductListComponent } from './page/productList/productList.component';
+import { ProductDetailComponent } from './page/productList/productDetail/productDetail.component';
+import { ProductAlertComponent } from './page/productList/productAlert/productAlert.component';
 
 @NgModule({
   schemas: [
@@ -15,7 +20,11 @@ import { LoginComponent } from './page/login/login.component';
   ],
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    TopbarComponent,
+    // ProductListComponent,
+    // ProductDetailComponent,
+    // ProductAlertComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +33,8 @@ import { LoginComponent } from './page/login/login.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    PartialImportModule
   ],
   providers: [],
   bootstrap: [AppComponent]
