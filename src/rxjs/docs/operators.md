@@ -163,7 +163,7 @@ const fileObservable = urlObservable.pipe(
 - [`exhaustMap`](https://rxjs.dev/api/operators/exhaustMap)
 - [`expand`](https://rxjs.dev/api/operators/expand)
 - [`groupBy`](https://rxjs.dev/api/operators/groupBy)
-- [`map`](https://rxjs.dev/api/operators/map)
+- [`map`](https://rxjs.dev/api/operators/map) 给定一个 `project` 函数参数到 源 Observable 每一个被推送的值
 - [`mapTo`](https://rxjs.dev/api/operators/mapTo)
 - [`mergeMap`](https://rxjs.dev/api/operators/mergeMap)
 - [`mergeMapTo`](https://rxjs.dev/api/operators/mergeMapTo)
@@ -193,7 +193,7 @@ const fileObservable = urlObservable.pipe(
 - [`distinctUntilKeyChanged`](https://rxjs.dev/api/operators/distinctUntilKeyChanged)
 - [`elementAt`](https://rxjs.dev/api/operators/elementAt)
 - [`filter`](https://rxjs.dev/api/operators/filter)
-- [`first`](https://rxjs.dev/api/operators/first)
+- [`first`](https://rxjs.dev/api/operators/first) 只推送源 Observable 第一个值（或第一个符合条件的值）
 - [`ignoreElements`](https://rxjs.dev/api/operators/ignoreElements)
 - [`last`](https://rxjs.dev/api/operators/last)
 - [`sample`](https://rxjs.dev/api/operators/sample)

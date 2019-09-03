@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="lib/rxjs.umd.min.js"></script>
+    <script>
+        const { of } = rxjs;
+        const { map, first } = rxjs.operators;
+        map(x => x * x)(of(1, 2, 3)).subscribe(v => console.log(`value: ${v}`));
+        // Logs:
+        // value: 1 
+        // value: 4
+        // value: 9
+
+        first()(of(1, 2, 3)).subscribe(v => console.log(`value: ${v}`));
+        // Logs:
+        // value: 1
+
+        //管道 piping
+        // 创建操作符
+        const { interval } = rxjs;
+        let observable = interval(1000/* 毫秒 */)
+        observable.subscribe(v => console.log(v));
+        // 每隔 1 秒 打印从 0 自增长值
+
+        // 创建自定义 observables
+        const { pipe } = rxjs;
+        const { filter } = rxjs.operators;
+        //满足过滤条件的值翻倍
+        function discardOddDoubleEven() {
+            return pipe(
+                filter(v => !(v % 2)),
+                map(v => v + v)
+            );
+        }
+        discardOddDoubleEven()(of(1, 2, 3)).subscribe(v => console.log(v));
+        // Logs:
+        // 4（2 + 2）
+
+        const { Observable } = rxjs;
+        function delay(delayInMillis) {
+            return observable => new Observable(observer => {
+                const allTimerIDs = new Set();
+                const subscription = observable.subscribe({
+                    next(value) {
+                        const timerId = setTimeout(() => {
+                            observer.next(value);
+                            allTimerIDs.delete(timerID);
+                        }, delayInMillis);
+                        allTimerIDs.add(timerId);
+                    },
+                    error(err) {
+                        observer.error(err);
+                    },
+                    complete() {
+                        observer.complete();
+                    }
+                });
+                //返回值的值是一个卸载函数
+                //当新的 Observable 取消订阅的时候它被调用
+                return () => {
+                    subscription.unsubscribe();
+                    allTimerIDs.forEach(timerID => {
+                        clearTimeout(timerID);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
