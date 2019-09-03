@@ -26,12 +26,12 @@
         //管道 piping
         // 创建操作符
         const { interval } = rxjs;
-        let observable = interval(1000/* 毫秒 */)
-        observable.subscribe(v => console.log(v));
+        // let observable = interval(1000/* 毫秒 */)
+        // observable.subscribe(v => console.log(v));
         // 每隔 1 秒 打印从 0 自增长值
 
         // 创建自定义 observables
-        const { pipe } = rxjs;
+        const { pipe, from } = rxjs;
         const { filter } = rxjs.operators;
         //满足过滤条件的值翻倍
         function discardOddDoubleEven() {
@@ -46,13 +46,13 @@
 
         const { Observable } = rxjs;
         function delay(delayInMillis) {
-            return observable => new Observable(observer => {
+            return _ => new Observable(observer => {
                 const allTimerIDs = new Set();
-                const subscription = observable.subscribe({
+                const subscription = _.subscribe({
                     next(value) {
                         const timerId = setTimeout(() => {
                             observer.next(value);
-                            allTimerIDs.delete(timerID);
+                            allTimerIDs.delete(timerId);
                         }, delayInMillis);
                         allTimerIDs.add(timerId);
                     },
@@ -66,6 +66,7 @@
                 //返回值的值是一个卸载函数
                 //当新的 Observable 取消订阅的时候它被调用
                 return () => {
+                    console.log("卸载");
                     subscription.unsubscribe();
                     allTimerIDs.forEach(timerID => {
                         clearTimeout(timerID);
@@ -73,6 +74,21 @@
                 }
             });
         }
+
+        observable = from([10, 20, 30]);
+        // obs.subscribe(v => console.log(v));
+        var observableFunc = delay(0);
+        var observable1 = observableFunc(observable);
+        var subcription = observable1.subscribe(
+            num => console.log(num),
+            undefined,
+            () => {
+                console.log("completed!");
+            });
+        // var cancel = observable1.subscribe(x => console.log(`got value ${x}`));
+        // cancel.unsubscribe();
+        // var cancel = delay(1000)(observable).subscribe(v => console.log(v));
+        // cancel.unsubscribe();
     </script>
 </body>
 
