@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   { path: 'cart', component: ProductListComponent },
   //路由参数化
-  { path: 'products/:productId', component: ProductDetailComponent }
+  { path: 'products/:productId', component: ProductDetailComponent, data: { title: '数据详情页' } }
 ];
 
 @NgModule({
