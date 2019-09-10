@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>momentjs</title>
+</head>
+
+<body>
+    <script src="asserts/moment.js"></script>
+    <script>
+        String.prototype.ToDate = function (format = 'yyyy-MM-dd') {
+            try {
+                let date = new Date(this);
+                const dateformat = {
+                    "M+": date.getMonth() + 1,
+                    "d+": date.getDate(),
+                    "h+": date.getHours(),
+                    "m+": date.getMinutes(),
+                    "s+": date.getSeconds(),
+                    "q+": Math.floor((date.getMonth() + 3) / 3),
+                    "S+": date.getMilliseconds()
+                };
+                if (/(y+)/i.test(format)) {
+                    format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length, 4));
+                }
+                for (var k in dateformat) {
+                    if (new RegExp("(" + k + ")").test(format)) {
+                        format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? dateformat[k] : ("00" + dateformat[k]).substr(("" + dateformat[k]).length));
+                    }
+                }
+                return format;
+            }
+            catch (e) {
+                console.error('该字符串不是有效的时间格式');
+                throw e;
+            }
+        }
+        Date.prototype.format = function (format = 'yyyy-MM-dd') {
+            try {
+                let date = this;
+                const dateformat = {
+                    "M+": date.getMonth() + 1,
+                    "d+": date.getDate(),
+                    "h+": date.getHours(),
+                    "m+": date.getMinutes(),
+                    "s+": date.getSeconds(),
+                    "q+": Math.floor((date.getMonth() + 3) / 3),
+                    "S+": date.getMilliseconds()
+                };
+                if (/(y+)/i.test(format)) {
+                    format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length, 4));
+                }
+                for (var k in dateformat) {
+                    if (new RegExp("(" + k + ")").test(format)) {
+                        format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? dateformat[k] : ("00" + dateformat[k]).substr(("" + dateformat[k]).length));
+                    }
+                }
+                return format;
+            }
+            catch (e) {
+                console.error('该字符串不是有效的时间格式');
+                throw e;
+            }
+        }
+
+        function ToDate(dateString, format = 'yyyy年MM月dd日') {
+            try {
+                let date = new Date(dateString);
+                const dateformat = {
+                    "M+": date.getMonth() + 1,
+                    "d+": date.getDate(),
+                    "h+": date.getHours(),
+                    "m+": date.getMinutes(),
+                    "s+": date.getSeconds(),
+                    "q+": Math.floor((date.getMonth() + 3) / 3),
+                    "S+": date.getMilliseconds()
+                };
+                if (/(y+)/i.test(format)) {
+                    format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length, 4));
+                }
+                for (var k in dateformat) {
+                    if (new RegExp("(" + k + ")").test(format)) {
+                        format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? dateformat[k] : ("00" + dateformat[k]).substr(("" + dateformat[k]).length));
+                    }
+                }
+                return format;
+            }
+            catch (e) {
+                console.error('dateString 不是有效的时间格式');
+                throw e;
+            }
+        }
+
+
+
+        let timeString = '2019/9/10 9:01:38';
+        let d = new Date(timeString);
+        let dateString = (d.getMonth() + 1) + "月" + d.getDate() + "日" + " " + d.getHours() + ":" + d.getMinutes();
+        console.log(dateString);
+        // return dateString;
+
+    </script>
+</body>
+
+</html>
