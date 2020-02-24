@@ -5,24 +5,24 @@ class QLineStyle {
     }
 }
 
-class QLine {
-    // lineStyle : CanvasRenderingContext2D
-    constructor(pt1, pt2, lineStyle) {
-        this.pt1 = pt1;
-        this.pt2 = pt2;
-        this.lineStyle = lineStyle;
-    }
-    // ctx : CanvasRenderingContext2D
-    onpaint(ctx) {
-        let lineStyle = this.lineStyle;
-        ctx.lineWidth = lineStyle.width;
-        ctx.strokeStyle = lineStyle.color;
-        ctx.beginPath();
-        ctx.moveTo(this.pt1.x, this.pt1.y);
-        ctx.lineTo(this.pt2.x, this.pt2.y);
-        ctx.stroke();
-    }
-}
+// class QLine {
+//     // lineStyle : CanvasRenderingContext2D
+//     constructor(pt1, pt2, lineStyle) {
+//         this.pt1 = pt1;
+//         this.pt2 = pt2;
+//         this.lineStyle = lineStyle;
+//     }
+//     // ctx : CanvasRenderingContext2D
+//     onpaint(ctx) {
+//         let lineStyle = this.lineStyle;
+//         ctx.lineWidth = lineStyle.width;
+//         ctx.strokeStyle = lineStyle.color;
+//         ctx.beginPath();
+//         ctx.moveTo(this.pt1.x, this.pt1.y);
+//         ctx.lineTo(this.pt2.x, this.pt2.y);
+//         ctx.stroke();
+//     }
+// }        // move to dom.js
 
 class QRect {
     constructor(x, y, width, height, lineStyle) {
