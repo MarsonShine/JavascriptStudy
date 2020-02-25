@@ -88,19 +88,20 @@ class QPath {
     }
 }
 
-class QPaintDoc {
-    constructor() {
-        this.shapes = [];
-    }
-    addShape(shape) {
-        if (shape != null) {
-            this.shapes.push(shape);
-        }
-    }
-    onpaint(ctx) {
-        let shapes = this.shapes;
-        for (let i in shapes) {
-            shapes[i].onpaint(ctx);
-        }
-    }
-}
+// 迁移到dom.js文件中
+// class QPaintDoc {
+//     constructor() {
+//         this.shapes = [];
+//     }
+//     addShape(shape) {
+//         if (shape != null) {
+//             this.shapes.push(shape);
+//         }
+//     }
+//     onpaint(ctx) {
+//         let shapes = this.shapes;
+//         for (let i in shapes) {
+//             shapes[i].onpaint(ctx);
+//         }
+//     }
+// }

@@ -60,6 +60,10 @@ function deleteItem(array, item) {
     }
 }
 
+function _isTempDoc(displayID) {
+    return displayID.charAt(0) == 't';
+}
+
 function _getNextID(key) {
     let dgBase = localStorage.getItem(key);
     if (dgBase == null) {
@@ -106,6 +110,15 @@ function localStorage_setItem(key, val) {
     }
 }
 
+function localStorage_getIntItem(key, defaultVal) {
+    let val = localStorage.getItem(key);
+    if (val == null) {
+        return defaultVal;
+    } else {
+        return parseInt(val);
+    }
+}
+
 function loadDrawing(localID) {
     let val = localStorage.getItem("dg:" + localID);
     return JSON.parse(val);
@@ -141,13 +154,24 @@ function loadShape(parent, id) {
     }
 }
 
-function shapeChanged(shape) {
+// function shapeChanged(shape) {
+//     if (shape.id != "") {
+//         let parent = shape.type;
+//         shape.type = shape.constructor.name;
+//         let val = JSON.stringify(shape);
+//         shape.type = parent;
+//         localStorage_setItem(parent.localID + ":" + shape.id, val);
+//     }
+// }
+function shapeChanged(parent, shape, noSync) {
     if (shape.id != "") {
-        let parent = shape.type;
-        shape.type = shape.constructor.name;
+        shape.ver = parent.ver;
         let val = JSON.stringify(shape);
-        shape.type = parent;
         localStorage_setItem(parent.localID + ":" + shape.id, val);
+        noSync = noSync || false;
+        if (!noSync) {
+            parent.syncer.fireChanged(parent);
+        }
     }
 }
 
@@ -202,5 +226,154 @@ class QLine {
         ctx.moveTo(this.pt1.x, this.pt1.y);
         ctx.lineTo(this.pt2.x, this.pt2.y);
         ctx.stroke();
+    }
+}
+
+var http = new XMLHttpRequest();
+
+// 离线编辑的图片要支持 一旦联网，在用户编辑画板的时候，自动保存到后端服务器
+// 如何判断用户上一次成功保存的跟用户编辑不为同一个呢？
+// 可以用版本控制，localStorage保存上次成功同步到后端的版本号ver，然后用户在本地编辑，一旦联网就与这个版本比较，大于ver就触发后端保存
+class QSynchronizer {
+    constructor() {
+        this.started = false;
+        this.dirty = false;
+    }
+    noflush(doSth) {
+        let old = this.started;
+        this.started = true;
+        doSth();
+        this.started = old;
+    }
+
+    fireLoaded(doc) {
+        let baseVerKey = "base:" + doc.displayID;
+        localStorage_setItem(baseVerKey, doc.ver.toString());
+        this.dirty = false;
+        doc.ver++;
+    }
+    fireChanged(doc) {
+        this.dirty = true;
+        if (this.started) {
+            return;
+        }
+        if (_isTempDoc(doc.displayID)) {
+            return;
+        }
+        // 服务端api
+        let syncUrl = "/api/drawings/" + doc.displayID + "/sync";
+        let baseVerKey = "base:" + doc.displayID;
+        let timeout = 1000;
+        let syncer = this;
+        let syncFunc = function () {
+            if (!syncer.dirty) {
+                syncer.started = false;
+                return;
+            }
+            syncer.dirty = false;
+            let baseVer = localStorage_getIntItem(baseVerKey, 0);
+            let o = doc.prepreSync(baseVer);
+            http.open("POST", syncUrl);
+            http.setRequestHeader("Content-Type", "application/json");
+            http.onreadystatechange = function () {
+                if (http.readyState != 4) {
+                    return;
+                }
+                if (http.status == 200) {
+                    localStorage_setItem(baseVerKey, o.ver.toString());
+                    syncFunc();
+                } else {
+                    console.log("QSynchronizer.sync status:", http.status, "-", http.statusText, "body:", o);
+                    syncer.dirty = true;
+                    setTimeout(syncFunc, timeout);
+                    timeout *= 2;
+                }
+            };
+            http.send(JSON.stringify(o));
+        };
+        syncer.started = true;
+        syncFunc();
+    }
+}
+
+class QSerializer {
+    constructor() {
+        this.creators = {};
+    }
+    register(name, creator) {
+        this.creators[name] = creator;
+    }
+    create(json) {
+        for (let key in json) {
+            if (key != "id") {
+                let creator = this.creators[key];
+                if (creator) {
+                    return creator(json);
+                }
+                break;
+            }
+        }
+        alert("unsupport shape: " + JSON.stringify(json));
+        return null;
+    }
+}
+
+var qshapes = new QSerializer();
+
+// QPaintDoc 类
+class QPaintDoc {
+    constructor() {
+        this._reset();
+    }
+
+    _reset() {
+        this._shapes = [];
+        this._idShapeBase = 0;
+        this.localID = "";
+        this.displayID = "";
+        this.ver = 1;
+        this.syncer = new QSynchronizer();
+        this.onload = null;
+    }
+
+    _initShape(shape) {
+        if (shape.id != "") {
+            alert("Can't init shape twice! shape.id = " + shape.id);
+            return shape;
+        }
+        this._idShapeBase++;
+        shape.id = this._idShapeBase.toString();
+        return shape;
+    }
+
+    _loadDrawing(o) {
+        let shapes = [];
+        for (let i in o.shapes) {
+            let shapeID = o.shapes[i];
+            let shape = loadShape(this, shapeID);
+            if (shape == null) {
+                continue;
+            }
+            shape.id = shapeID;
+            shapes.push(shape);
+        }
+        this._shapes = shapeds;
+    }
+
+    _loadRemoteDrawing(o) {
+        let shapes = [];
+        let idShapeBase = 0;
+        for (let i in o.shapes) {
+            let shape = qshapes.create(o.shapes[i]);
+            if (shape == null) {
+                continue;
+            }
+            let id = parseInt(shape.id);
+            if (id > idShapeBase) {
+                idShapeBase = id;
+            }
+            shapes.push(shape);
+            shapeChanged(this, shape, true);
+        }
     }
 }
