@@ -13,6 +13,21 @@
 </body>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
 <script>
+    function dataURLtoFile(dataurl, filename) {
+
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
+    }
+
     (async () => {
         const reponse = await fetch('http://localhost:4362/task/student/export', {
             method: 'POST',
@@ -23,7 +38,15 @@
             body: JSON.stringify({ taskId: 1, studentTaskIds: [] })
         });
 
-        const blob = await reponse.blob();
+        const json = await reponse.json();
+
+        const fileContents = json.data.fileContents;
+        var blob = dataURLtoFile(`data:application/octet-stream;base64,${fileContents}`, 'hello.xlsm');
+        
+        //console.log(file);
+
+        //const blob = new Blob([JSON.stringify(json.data.fileContents)], { type:"application/octet-stream"})
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
