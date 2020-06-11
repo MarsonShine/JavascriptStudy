@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script>
+    (async () => {
+        const reponse = await fetch('http://localhost:4362/task/student/export', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ taskId: 1, studentTaskIds: [] })
+        });
+
+        const blob = await reponse.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = 'todo-1.xlsm';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        alert('your file has downloaded!');
+        console.log(blob);
+    })();
+    window.onload = function () {
+        var json = {
+            taskId: 1,
+            studentTaskIds: []
+        };
+        //postData('//localhost:4362/task/student/export', json)
+        //    .then(blob => {
+        //        const url = window.URL.createObjectURL(blob);
+        //        const a = document.createElement('a');
+        //        a.style.display = 'none';
+        //        a.href = url;
+        //        // the filename you want
+        //        a.download = 'todo-1.xlsm';
+        //        document.body.appendChild(a);
+        //        a.click();
+        //        window.URL.revokeObjectURL(url);
+        //        alert('your file has downloaded!');
+        //    })
+        //    .catch(() => alert('oh no!'));
+
+        //function postData(url, data) {
+        //    return fetch({
+        //        url: url,
+        //        body: JSON.stringify(data),
+        //        headers: {
+        //            'content-type': 'application/json'
+        //        },
+        //        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        //    })
+        //        .then(resp => {
+        //            console.log(resp);
+        //            return resp.blob();
+        //        })
+        //}
+    }
+    // $(document).ready(function(){
+    //     var json = {taskId: 1,
+    //     studentTaskIds: [
+    //     ]};
+    //     $.ajax({
+    //         method:'post',
+    //         url:'http://localhost:4362/task/student/export',
+    //         data:JSON.stringify(json),
+    //         contentType:'application/json'
+    //     }).done(function(response, status, xhr){
+    //         console.log(response)
+    //     })
+    // })
+
+</script>
+</html>
