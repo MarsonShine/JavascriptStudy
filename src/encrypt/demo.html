@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="aes_1.js"></script>
+    <script>
+        var key = CryptoJS.enc.Utf8.parse("MLKJIUHYGBNHGVFGTYTRFGBVCFGTRSHJ");
+        var iv = CryptoJS.enc.Utf8.parse("qweghjbnm456lo9p");
+        function Encrypt(word){
+            // srcs = CryptoJS.enc.Utf8.parse(word);
+            var encrypted = CryptoJS.AES.encrypt(word, key, { iv: iv,mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+            return encrypted.ciphertext.toString().toUpperCase();
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
