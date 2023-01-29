@@ -5,16 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="aes_1.js"></script>
+</head>
+<body>
+    <input type="file">
+    <button>确认</button>
     <script>
-        var key = CryptoJS.enc.Utf8.parse("MLKJIUHYGBNHGVFGTYTRFGBVCFGTRSHJ");
-        var iv = CryptoJS.enc.Utf8.parse("qweghjbnm456lo9p");
+
+        var key = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0,32));
+        var iv = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0,16));
         function Encrypt(word){
             // srcs = CryptoJS.enc.Utf8.parse(word);
             var encrypted = CryptoJS.AES.encrypt(word, key, { iv: iv,mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
             return encrypted.ciphertext.toString().toUpperCase();
         }
+
+        function Decrypt(input) {
+            var file = input.files[0];
+            var reader = new FileReader();
+            reader.onload = () => {
+                var decrypted = CryptoJS.AES.decrypt(reader.result,"c6ab4d82a77d42f3829bb8937a546020");
+                var typedArray = convertWordArrayToUint8Array(decrypted);               // Convert: WordArray -> typed array
+
+                var fileDec = new Blob([typedArray]);
+                var a = document.createElement("a");
+                var url = window.URL.createObjectURL(fileDec);
+                var filename = file.name.substr(0, file.name.length - 4) + ".dec";
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+            reader.readAsText(file)
+        }
+
+        function convertWordArrayToUint8Array(wordArray) {
+            var arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];
+            var length = wordArray.hasOwnProperty("sigBytes") ? wordArray.sigBytes : arrayOfWords.length * 4;
+            var uInt8Array = new Uint8Array(length), index=0, word, i;
+            for (i=0; i<length; i++) {
+                word = arrayOfWords[i];
+                uInt8Array[index++] = word >> 24;
+                uInt8Array[index++] = (word >> 16) & 0xff;
+                uInt8Array[index++] = (word >> 8) & 0xff;
+                uInt8Array[index++] = word & 0xff;
+            }
+            return uInt8Array;
+        }
+            document.getElementsByTagName("button").item(0).onclick = () => {
+                Decrypt(document.getElementsByTagName("input").item(0))
+            }
     </script>
-</head>
-<body>
 </body>
 </html>
