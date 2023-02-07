@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/aes-js/3.1.2/index.min.js"></script>
     <script src="aes_1.js"></script>
 </head>
+
 <body>
     <input type="file">
     <button>确认</button>
     <script>
 
-        var key = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0,32));
-        var iv = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0,16));
-        function Encrypt(word){
+        var key = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0, 32));
+        var iv = CryptoJS.enc.Utf8.parse("c6ab4d82a77d42f3829bb8937a546020".substr(0, 16));
+        function Encrypt(word) {
             // srcs = CryptoJS.enc.Utf8.parse(word);
-            var encrypted = CryptoJS.AES.encrypt(word, key, { iv: iv,mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+            var encrypted = CryptoJS.AES.encrypt(word, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
             return encrypted.ciphertext.toString().toUpperCase();
         }
 
         function Decrypt(input) {
             var file = input.files[0];
             var reader = new FileReader();
-            reader.onload = () => {
-                var decrypted = CryptoJS.AES.decrypt(reader.result,"c6ab4d82a77d42f3829bb8937a546020");
-                var typedArray = convertWordArrayToUint8Array(decrypted);               // Convert: WordArray -> typed array
+            // reader.readAsArrayBuffer(file)
+            reader.onload = (event) => {
+                const encrypted = event.target.result;
+                const decrypted = convertWordArrayToUint8Array(CryptoJS.AES.decrypt(
+                    encrypted, key, { iv: iv }
+                ));
 
-                var fileDec = new Blob([typedArray]);
-                var a = document.createElement("a");
-                var url = window.URL.createObjectURL(fileDec);
-                var filename = file.name.substr(0, file.name.length - 4) + ".dec";
-                a.href = url;
-                a.download = filename;
-                a.click();
-                window.URL.revokeObjectURL(url);
+                const objectURL = URL.createObjectURL(new Blob([decrypted]));
+                const img = new Image();
+                img.src = objectURL;
+                document.body.appendChild(img);
             };
-            reader.readAsText(file)
+            reader.readAsText(file);
         }
 
         function convertWordArrayToUint8Array(wordArray) {
@@ -51,9 +53,11 @@
             }
             return uInt8Array;
         }
-            document.getElementsByTagName("button").item(0).onclick = () => {
-                Decrypt(document.getElementsByTagName("input").item(0))
-            }
+
+        document.getElementsByTagName("button").item(0).onclick = () => {
+            Decrypt(document.getElementsByTagName("input").item(0))
+        }
     </script>
 </body>
+
 </html>
